@@ -19,6 +19,8 @@
 #' @param utility QALY adjustment utility due to active TB
 #' @param N Number of patients. The number in the data is used as default
 #' @param wholecohortstats Should the output stats be the total or per patient
+#' @param terminal_cost function of terminal node total costs
+#' @param terminal_health function of terminal node total QALY loss
 #'
 #' @return Health and cost realisations (list)
 #'
@@ -38,7 +40,9 @@ dectree <- function(data,
                     quant = 0.5, #median
                     utility = NA,
                     N = nrow(data),
-                    wholecohortstats = FALSE) {
+                    wholecohortstats = FALSE,
+                    terminal_health,
+                    terminal_cost) {
 
   # require(assertive)
   require(triangle)
@@ -76,10 +80,6 @@ dectree <- function(data,
   # sample params #
   #################
 
-  # respiratory medicine, multi-professional (National tariff)
-  visit1cost <- rgamma(n = nsim, shape = 53.3, scale = 4.52)
-  visit2cost <- rgamma(n = nsim, shape = 18.78, scale = 7.62)
-
   if (is.na(utility)) {
     # QoL detriment: triangle(0.11, 0.21, 0.31)
     utility <- rtriangle(n = nsim, a = 0.69, b = 0.89)  #1-QALY loss i.e. relative to non-TB (<1)
@@ -91,8 +91,13 @@ dectree <- function(data,
   costDistns$MRI$params["mean"] <- 0
   costDistns$CT$params["mean"]  <- 0
 
+  cost <- health <- list()
 
   for (i in 1:nsim) {
+
+    # respiratory medicine, multi-professional (National tariff)
+    cost$visit1 <- rgamma(n = 1, shape = 53.3, scale = 4.52)
+    cost$visit2 <- rgamma(n = 1, shape = 18.78, scale = 7.62)
 
     rperformance <- treeSimR::sample_distributions(performance)
     rcosts <- treeSimR::sample_distributions(costDistns)
@@ -115,14 +120,14 @@ dectree <- function(data,
 
     totalcost[whoCat4Treated] <- totalcost[whoCat4Treated] + twomonthTreatCost
 
-    if (!is.na(name.ruleout)) c.ruleout <- rcosts[[name.ruleout]]
+    if (!is.na(name.ruleout)) cost$ruleout <- rcosts[[name.ruleout]]
 
-    h.ruleout <- utility[i] * t.ruleout
+    health$ruleout <- utility[i] * t.ruleout
 
     if (FNdist) {
-      h.FN <- utility[i] * FNdens$x[sum(runif(1) > Fx)]
+      health$FN <- utility[i] * FNdens$x[sum(runif(1) > Fx)]
     }else{
-      h.FN <- utility[i]*FNtime}
+      health$FN <- utility[i]*FNtime}
 
     TB  <- rbinom(n = 1, size = N, prob = prevalence)
     nTB <- N - TB
@@ -147,59 +152,31 @@ dectree <- function(data,
     sboot.nonTB <- sample(which(data$DosanjhGrouped == 4), replace = TRUE)
     sboot.TB <- sample(which(data$DosanjhGrouped %in% c(1,2,3)), replace = TRUE)
 
-    c.std.nonTB <- median(totalcost[sboot.nonTB])
-    c.std.TB <- median(totalcost[sboot.TB])
-    start.to.diag.nonTB <- median(data$start.to.diag[sboot.nonTB])
-    start.to.diag.TB <- median(data$start.to.diag[sboot.TB])
+    cost$std.nonTB <- median(totalcost[sboot.nonTB]) %>% unname()
+    cost$std.TB <- median(totalcost[sboot.TB]) %>% unname()
+    start.to.diag.nonTB <- median(data$start.to.diag[sboot.nonTB]) %>% unname()
+    start.to.diag.TB <- median(data$start.to.diag[sboot.TB]) %>% unname()
 
-    h.std.TB <- utility[i]*start.to.diag.TB
-    h.std.nonTB <- utility[i]*start.to.diag.nonTB
-
+    health$std.TB <- utility[i]*start.to.diag.TB
+    health$std.nonTB <- utility[i]*start.to.diag.nonTB
 
     ##########
     # totals #
     ##########
 
-    # each terminal node in decision tree
-    cost <-
-      c(visit1cost[i] + c.std.TB,
-        visit1cost[i] + c.std.nonTB,
-        "TB_pos" = visit1cost[i] + c.std.TB + c.ruleout,
-        "TB_neg" = visit1cost[i] + c.std.TB + c.ruleout + visit2cost[i],
-        "notTB_pos" = visit1cost[i] + c.std.nonTB + c.ruleout,
-        "notTB_neg" = visit1cost[i] + c.ruleout)
+    Ec.old <- (cost$visit1*N + cost$std.TB*TB + cost$std.nonTB*nTB)/N     #THIS IS A BIT OF A PROBLEM FOR VARYING PREVALENCE IN ORDER TO BE A COMPARISON FOR ALL...
+    Ee.old <- (health$std.TB*TB + health$std.nonTB*nTB)/N                 #SIMILARLY THE SAMPLED CURRENT TIMES AND COSTS
 
-    health <-
-      c(h.std.TB,
-        h.std.nonTB,
-        "TB_pos" = h.std.TB + h.ruleout,
-        "TB_neg" = h.std.TB + h.ruleout + h.FN,
-        "notTB_pos" = h.std.nonTB + h.ruleout,
-        "notTB_neg" = h.ruleout)
-
-    Ec.old <- (visit1cost[i]*N + c.std.TB*TB + c.std.nonTB*nTB)/N     #THIS IS A BIT OF A PROBLEM FOR VARYING PREVALENCE IN ORDER TO BE A COMPARISON FOR ALL...
-    Ee.old <- (h.std.TB*TB + h.std.nonTB*nTB)/N                       #SIMILARLY THE SAMPLED CURRENT TIMES AND COSTS
-
-
-    ##TODO## fix this bug. quick fix only
-    ##why have I got these checks?...
 
     ## expected values
-    if (length(pop) == length(health)) {
+    if (!is.na(Ec.old) & !is.na(Ee.old)) {
 
-      if (!is.na(Ec.old) & !is.na(Ee.old)) {
-
-        e <- rbind(e,
-                   c(Ee.old, (pop %*% health)/N))
-        c <- rbind(c,
-                   c(Ec.old, (pop %*% cost)/N))
-      }
-    }else{
-
-      #just repeat last row; why?
-      e <- rbind(e, e[nrow(e), ])
-      c <- rbind(c, c[nrow(c), ])
+      e <- rbind(e,
+                 c(Ee.old, (pop %*% terminal_health(health))/N))
+      c <- rbind(c,
+                 c(Ec.old, (pop %*% terminal_cost(cost))/N))
     }
+
   }
 
   colnames(e) <- c('e0', 'e1')
