@@ -1,0 +1,22 @@
+Package: VANTDET
+Type: Package
+Title: Cost-Effectiveness Decision Tree
+Version: 0.1.0
+Author: N Green
+Maintainer: The package maintainer <yourself@somewhere.net>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+Imports:
+    reshape,
+    ggplot2,
+    XLConnect,
+    dplyr,
+    mondate,
+    lubridate,
+    magrittr,
+    purrr,
+    treeSimR
+RoxygenNote: 6.0.1
