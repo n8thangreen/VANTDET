@@ -37,6 +37,12 @@ costs$proteomic_flowassay$params <- c(mean = 100 + 150)
 costs$molecular$distn <- "none"
 costs$molecular$params <- c(mean = NA)
 
+costs$visit1$distn <- "gamma"
+costs$visit1$params <- c(shape = 53.3, scale = 4.52)
+
+costs$visit2$distn <- "gamma"
+costs$visit2$params <- c(shape = 18.78, scale = 7.62)
+
 
 #########
 # times #

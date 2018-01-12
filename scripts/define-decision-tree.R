@@ -8,42 +8,34 @@
 
 terminal_cost_ruleout <- function(cost) {
 
-  c(cost$visit1 + cost$std.TB,
-    cost$visit1 + cost$std.nonTB,
-    cost$visit1 + cost$std.TB + cost$ruleout,
-    cost$visit1 + cost$std.TB + cost$ruleout + cost$visit2,
-    cost$visit1 + cost$std.nonTB + cost$ruleout,
-    cost$visit1 + cost$ruleout)
+  c(cost$visit1 + cost$std.TB + cost$newtest,
+    cost$visit1 + cost$std.TB + cost$newtest + cost$visit2,
+    cost$visit1 + cost$std.nonTB + cost$newtest,
+    cost$visit1 + cost$newtest)
 }
 
 terminal_health_ruleout <- function(health) {
 
-  c(health$std.TB,
-    health$std.nonTB,
-    health$std.TB + health$ruleout,
-    health$std.TB + health$ruleout + health$FN,
-    health$std.nonTB + health$ruleout,
-    health$ruleout)
+  c(health$std.TB + health$newtest,
+    health$std.TB + health$newtest + health$followup,
+    health$std.nonTB + health$newtest,
+    health$newtest)
 }
 
 # rule-in test
 
-terminal_cost_ruleout <- function(cost) {
+terminal_cost_rulein <- function(cost) {
 
-  c(cost$visit1 + cost$std.TB,
-    cost$visit1 + cost$std.nonTB,
-    cost$visit1 + cost$std.TB + cost$ruleout,
-    cost$visit1 + cost$std.TB + cost$ruleout + cost$visit2,
-    cost$visit1 + cost$std.nonTB + cost$ruleout,
-    cost$visit1 + cost$ruleout)
+  c(cost$visit1 + cost$newtest,
+    cost$visit1 + cost$std.TB + cost$newtest,
+    cost$visit1 + cost$twomonthTx + cost$newtest,
+    cost$visit1 + cost$std.nonTB + cost$newtest)
 }
 
-terminal_health_ruleout <- function(health) {
+terminal_health_rulein <- function(health) {
 
-  c(health$std.TB,
-    health$std.nonTB,
-    health$std.TB + health$ruleout,
-    health$std.TB + health$ruleout + health$FN,
-    health$std.nonTB + health$ruleout,
-    health$ruleout)
+  c(health$newtest,
+    health$std.TB + health$newtest,
+    health$twomonthTx + health$newtest,
+    health$std.nonTB + health$newtest)
 }
