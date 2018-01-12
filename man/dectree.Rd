@@ -4,10 +4,10 @@
 \alias{dectree}
 \title{Decision Tree Calculation}
 \usage{
-dectree(data, nsim = 100, costDistns, time_res, prevalence = 0.25,
-  cutoff = 1, FNtime = 42, FNdist = TRUE, performance, c.ruleout = 0,
-  name.ruleout = NA, quant = 0.5, utility = NA, N = nrow(data),
-  wholecohortstats = FALSE)
+dectree(data, nsim = 100, costDistns, time_res, drug = drug,
+  prevalence = 0.25, performance, c.newtest = 0, name.newtest = NA,
+  quant = 0.5, QALYloss, N = nrow(data), wholecohortstats = FALSE,
+  terminal_health, terminal_cost, followup_pdf, ...)
 }
 \arguments{
 \item{data}{IDEA study data (data.frame)}
@@ -18,27 +18,31 @@ dectree(data, nsim = 100, costDistns, time_res, prevalence = 0.25,
 
 \item{time_res}{time to obtain novel test result (list)}
 
+\item{drug}{treatment drug cost and quantities (list)}
+
 \item{prevalence}{TB proportion in cohort (double 0-1) Default: 0.25}
-
-\item{cutoff}{Clinical judgement threshold (double 0-1) Default: 1}
-
-\item{FNtime}{False negative follow-up time fixed value (double) Default: 42}
-
-\item{FNdist}{Should false negative time to follow-up distribution be used (logical) Default: TRUE}
 
 \item{performance}{Sensitivity and specificity test (list)}
 
-\item{c.ruleout}{Rule-out test unit cost (double) Defalut: 0}
+\item{c.newtest}{Rule-out test unit cost (double) Defalut: 0}
 
-\item{name.ruleout}{Name of rule-out test to get at distribution (string)}
+\item{name.newtest}{Name of rule-out test to get at distribution (string)}
 
 \item{quant}{Quantile value of time to diagnosis and costs from observed data (double 0-1) Default: 0.5 (median)}
 
-\item{utility}{QALY adjustment utility due to active TB}
+\item{QALYloss}{QALY loss due to active TB (list)}
 
 \item{N}{Number of patients. The number in the data is used as default}
 
 \item{wholecohortstats}{Should the output stats be the total or per patient}
+
+\item{terminal_health}{function of terminal node total QALY loss}
+
+\item{terminal_cost}{function of terminal node total costs}
+
+\item{followup_pdf}{Follow-up appointment time probability distribution function}
+
+\item{...}{}
 }
 \value{
 Health and cost realisations (list)
