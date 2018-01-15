@@ -2,10 +2,10 @@ Package: VANTDET
 Type: Package
 Title: Cost-Effectiveness Decision Tree
 Version: 0.1.0
-Authors@R: person("Nathan", "Green")
-Maintainer: nathan.green@imperial.ac.uk
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Authors@R: c(person("Nathan", "Green", role = c("aut", "cre"),
+                     email = "nathan.green@imperial.ac.uk"))
+Maintainer: Nathan Green <nathan.green@imperial.ac.uk>
+Description: VNATDET project
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true

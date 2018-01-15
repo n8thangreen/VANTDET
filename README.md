@@ -1,3 +1,8 @@
+VANTDET
+================
+Nathan Green
+2018-01-15
+
 `VANTDET`
 =========
 
@@ -16,13 +21,15 @@ Installing `VANTDET`
 
 To install the development version from github:
 
-    library(devtools)
-    install_github("n8thangreen/VANTDET")
+``` r
+library(devtools)
+install_github("n8thangreen/VANTDET")
+```
 
 Then, to load the package, use:
 
-    library("VANTDET")
+``` r
+library("VANTDET")
+```
 
-See package
-[Vignette](http://htmlpreview.github.io/?https://github.com/n8thangreen/treeSimR/blob/master/inst/doc/vignette_main.html)
-for more details and examples.
+See package [Vignette]() for more details and examples.
