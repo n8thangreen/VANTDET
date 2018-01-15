@@ -1,14 +1,40 @@
 ---
-title: "README"
-output: html_document
+---
+title: "VANTDET"
+author: "Nathan Green"
+date: "`r Sys.Date()`"
+output: md_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r set-options, echo=FALSE, cache=FALSE}
+options(width = 1000)
 ```
 
-## Introduction
 
-```{r}
+# `VANTDET`
+
+An R package for novel active TB diagnostic cost-effectiveness analysis.
+
+Currently contains functions to:
+
+* ...
+
+_TODO_
+
+- [ ] ...
+
+## Installing `VANTDET`
+
+To install the development version from github:
+```{r eval=FALSE}
+library(devtools)
+install_github("n8thangreen/VANTDET")
 ```
+
+Then, to load the package, use:
+```{r eval=FALSE}
+library("VANTDET")
+```
+
+See package [Vignette](http://htmlpreview.github.io/?https://github.com/n8thangreen/treeSimR/blob/master/inst/doc/vignette_main.html) for more details and examples.
 
