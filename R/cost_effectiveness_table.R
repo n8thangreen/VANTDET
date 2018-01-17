@@ -22,9 +22,12 @@ cost_effectiveness_table.bcea <- function(dat,
     if (dat$n.comparisons == 1) {
       with(dat,
            do.call(data.frame,
-                   list("percentile_5th" = quantile(x = ib[k == wtp_threshold, ], probs = 0.05),
+                   list("mean_incr_e" = mean(delta.e),
+                        "mean_incr_c" = mean(delta.c),
                         "EINB" = eib[k == wtp_threshold],
+                        "percentile_5th" = quantile(x = ib[k == wtp_threshold, ], probs = 0.05),
                         "percentile_95th" = quantile(x = ib[k == wtp_threshold, ], probs = 0.95),
+                        "ICER" = ICER,
                         "ceac_WTP15000" = ceac[k == 15000],
                         "ceac_WTP20000" = ceac[k == 20000],
                         "ceac_WTP25000" = ceac[k == 25000],
@@ -33,16 +36,19 @@ cost_effectiveness_table.bcea <- function(dat,
 
       with(dat,
            do.call(data.frame,
-                   list("percentile_5th" = apply(ib[k == wtp_threshold, , ], 2, quantile, probs = 0.05),
+                   list("mean_incr_e" = apply(delta.e, 2, mean),
+                        "mean_incr_c" = apply(delta.c, 2, mean),
                         "EINB" = eib[k == wtp_threshold, ],
+                        "percentile_5th" = apply(ib[k == wtp_threshold, , ], 2, quantile, probs = 0.05),
                         "percentile_95th" = apply(ib[k == wtp_threshold, , ], 2, quantile, probs = 0.95),
+                        "ICER" = ICER,
                         "ceac_WTP15000" = ceac[k == 15000, ],
                         "ceac_WTP20000" = ceac[k == 20000, ],
                         "ceac_WTP25000" = ceac[k == 25000, ],
                         "ceac_WTP30000" = ceac[k == 30000, ])))
     }
 
-  return(out)
+  return(data.frame('scenario' = dat$interventions[-1], out))
 }
 
 
