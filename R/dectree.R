@@ -27,7 +27,7 @@
 #' @examples
 #'
 dectree <- function(data,
-                    nsim = 100,
+                    nsim = 1000,
                     costDistns,
                     time_res,
                     drug = drug,
@@ -157,8 +157,8 @@ dectree <- function(data,
     # totals #
     ##########
 
-    terminal_cost_std <- c(cost$visit1 + cost$std.TB,
-                           cost$visit1 + cost$std.nonTB)
+    terminal_cost_std <- c(cost$std.TB,
+                           cost$std.nonTB)
 
     terminal_health_std <- c(health$std.TB,
                              health$std.nonTB)
