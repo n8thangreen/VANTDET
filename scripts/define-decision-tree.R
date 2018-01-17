@@ -28,7 +28,7 @@ terminal_cost_rulein <- function(cost) {
 
   c(cost$visit1 + cost$newtest,
     cost$visit1 + cost$std.TB + cost$newtest,
-    cost$visit1 + cost$twomonthTx + cost$newtest,
+    cost$visit1 + cost$twomonthTx + cost$newtest + cost$visit2,
     cost$visit1 + cost$std.nonTB + cost$newtest)
 }
 

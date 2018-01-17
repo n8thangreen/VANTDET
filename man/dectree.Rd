@@ -4,7 +4,7 @@
 \alias{dectree}
 \title{Decision Tree Calculation}
 \usage{
-dectree(data, nsim = 100, costDistns, time_res, drug = drug,
+dectree(data, nsim = 1000, costDistns, time_res, drug = drug,
   prevalence = 0.25, performance, c.newtest = 0, name.newtest = NA,
   quant = 0.5, QALYloss, N = nrow(data), wholecohortstats = FALSE,
   terminal_health, terminal_cost, followup_pdf, ...)
