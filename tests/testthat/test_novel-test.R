@@ -21,10 +21,10 @@ test_that("dectree status-quo", {
 
   out <- dectree_test(
     performance = performance$proteomic_flowassay,
-    terminal_cost = function(cost) c(cost$visit1 + cost$std.TB,
-                                     cost$visit1 + cost$std.TB,
-                                     cost$visit1 + cost$std.nonTB,
-                                     cost$visit1 + cost$std.nonTB),
+    terminal_cost = function(cost) c(cost$std.TB,
+                                     cost$std.TB,
+                                     cost$std.nonTB,
+                                     cost$std.nonTB),
     terminal_health = function(health) c(health$std.TB,
                                          health$std.TB,
                                          health$std.nonTB,

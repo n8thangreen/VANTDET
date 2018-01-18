@@ -16,13 +16,14 @@ dectree_test <-
 
 test_that("dectree performance and prevalence", {
 
-  PERFORMANCE <- list()
 
-  PERFORMANCE$sens$distn <- "unif"
-  PERFORMANCE$sens$params <- c(min = 1, max = 1)
-
-  PERFORMANCE$spec$distn <- "unif"
-  PERFORMANCE$spec$params <- c(min = 1, max = 1)
+  PERFORMANCE <- list(
+    sens =
+      list(distn = "unif",
+           params = c(min = 1, max = 1)),
+    spec =
+      list(distn = "unif",
+           params = c(min = 1, max = 1)))
 
   out <- dectree_test(
     prevalence = 1,

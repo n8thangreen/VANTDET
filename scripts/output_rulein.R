@@ -15,67 +15,35 @@ dat[['transcript']] <- dectree(
   data = data,
   name.newtest = "transcript",
   costDistns = costs,
-  performance = performance$transcript,
+  performance = performance$transcript$rulein,
   time_res = time_res$transcript,
   drug = drug,
   QALYloss = QALYloss,
   terminal_cost = terminal_cost_rulein,
   terminal_health = terminal_health_rulein)
 
-# dat[['proteomic_SELDI']] <- dectree(
-#   data = data,
-#   name.newtest = "proteomic_SELDI",
-#   costDistns = costs,
-#   performance = performance$proteomic_SELDI,
-#   time_res = time_res$proteomic_SELDI,
-#   drug = drug,
-#   QALYloss = QALYloss,
-#   terminal_cost = terminal_cost_rulein,
-#   terminal_health = terminal_health_rulein)
-
-dat[['proteomic_LC_MS']] <- dectree(
+dat[['proteomic_SELDI']] <- dectree(
   data = data,
-  name.newtest = "proteomic_LC_MS",
+  name.newtest = "proteomic_SELDI",
   costDistns = costs,
-  performance = performance$proteomic_LC_MS,
-  time_res = time_res$proteomic_LC_MS,
+  performance = performance$proteomic_SELDI$rulein,
+  time_res = time_res$proteomic_SELDI,
   drug = drug,
   QALYloss = QALYloss,
   terminal_cost = terminal_cost_rulein,
   terminal_health = terminal_health_rulein)
 
-# dat[['proteomic_ELISA']] <- dectree(
-#   data = data,
-#   name.newtest = "proteomic_ELISA",
-#   costDistns = costs,
-#   performance = performance$proteomic_ELISA,
-#   time_res = time_res$proteomic_ELISA,
-#   drug = drug,
-#   QALYloss = QALYloss,
-#   terminal_cost = terminal_cost_rulein,
-#   terminal_health = terminal_health_rulein)
 
 dat[['proteomic_flowassay']] <- dectree(
   data = data,
-  name.newtest = "proteomic_flowassay",
+  name.newtest =  c("IGRA", "proteomic_flowassay"),
   costDistns = costs,
-  performance = performance$proteomic_flowassay,
-  time_res = time_res$proteomic_flowassay,
+  performance = performance$IGRApos_then_flowassay,
+  time_res = time_res$IGRApos_then_flowassay,
   drug = drug,
   QALYloss = QALYloss,
-  terminal_cost = terminal_cost_rulein,
-  terminal_health = terminal_health_rulein)
-
-# dat[['microscopy']] <- dectree(
-#   data = data,
-#   name.newtest = "microscopy",
-#   costDistns = costs,
-#   performance = performance$microscopy,
-#   time_res = time_res$microscopy,
-#   drug = drug,
-#   QALYloss = QALYloss,
-#   terminal_cost = terminal_cost_rulein,
-#   terminal_health = terminal_health_rulein)
+  terminal_cost = terminal_cost_dual,
+  terminal_health = terminal_health_dual)
 
 
 e_df <- do.call(cbind, purrr::map(dat, 'e'))

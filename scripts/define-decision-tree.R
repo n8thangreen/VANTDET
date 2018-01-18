@@ -39,3 +39,29 @@ terminal_health_rulein <- function(health) {
     health$twomonthTx + health$newtest,
     health$std.nonTB + health$newtest)
 }
+
+#
+##
+##TODO:
+##
+#
+
+
+terminal_cost_dual <- function(cost) {
+
+  c(cost$visit1 + cost$first_test + cost$second_test,
+    cost$visit1 + cost$std.TB + cost$first_test,
+    cost$visit1 + cost$twomonthTx + cost$first_test + cost$second_test + cost$visit2,
+    cost$visit1 + cost$std.nonTB + cost$first_test)
+}
+
+terminal_health_dual <- function(health) {
+
+  c(health$first_test + health$second_test,
+    health$std.TB + health$first_test,
+    health$twomonthTx + health$first_test + health$second_test,
+    health$std.nonTB + health$first_test)
+}
+
+
+
