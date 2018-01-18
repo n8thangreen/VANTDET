@@ -52,10 +52,15 @@ dectree <- function(data,
             prevalence >= 0,
             prevalence <= 1,
             c.newtest >= 0)
+  stopifnot(length(performance) == length(name.newtest))
+  stopifnot(length(time_res) == length(name.newtest))
+
 
   median <- purrr::partial(...f = quantile, probs = quant, na.rm = TRUE)
 
   e <- c <- NULL
+
+  num_tests <- length(name.newtest)
 
   if (wholecohortstats) N <- 1
 
@@ -98,9 +103,9 @@ dectree <- function(data,
 
   for (i in 1:nsim) {
 
-    rperformance <- treeSimR::sample_distributions(performance)
+    rperformance <- lapply(performance, function(x) treeSimR::sample_distributions(x))
     rcosts <- treeSimR::sample_distributions(costDistns)
-    t.newtest <- unlist(treeSimR::sample_distributions(time_res))
+    t.newtest <- sapply(time_res, function(x) unlist(treeSimR::sample_distributions(x)))
     rQALYloss <- treeSimR::sample_distributions(QALYloss)/365.25
 
     rfollowup <- inverse_sample(followup_cdf)
@@ -115,7 +120,7 @@ dectree <- function(data,
 
     totalcost[whoCat4Treated] <- totalcost[whoCat4Treated] + cost$twomonthTx
 
-    if (!is.na(name.newtest)) cost$newtest <- rcosts[[name.newtest]]
+    if (!all(is.na(name.newtest))) cost$newtest <- unlist(rcosts[name.newtest])
 
     health$newtest <- rQALYloss$TB * t.newtest
 
@@ -140,18 +145,31 @@ dectree <- function(data,
     # indiv sample #
     ################
 
+    ##TODO: generalise to any number of test and not just rulein test
+
     TB  <- rbinom(n = 1, size = N, prob = prevalence)
     nTB <- N - TB
 
-    TBpos <- rbinom(n = 1, size = TB, prob = rperformance$sens)
+    TBpos <- rbinom(n = 1, size = TB, prob = rperformance[[1]]$sens)
     TBneg <- TB - TBpos
 
-    nTBpos <- rbinom(n = 1, size = nTB, prob = 1 - rperformance$spec)
+    nTBpos <- rbinom(n = 1, size = nTB, prob = 1 - rperformance[[1]]$spec)
     nTBneg <- nTB - nTBpos
 
     # final subpopulation sizes
     pop_std <- c(TB, nTB)
     pop <- c(TBpos, TBneg, nTBpos, nTBneg)
+
+    if (num_tests == 2) {
+
+      TBpos_dualpos <- rbinom(n = 1, size = TBpos, prob = rperformance[[2]]$sens)
+      TBpos_dualneg <- TBpos - TBpos_dualpos
+
+      nTBpos_dualpos <- rbinom(n = 1, size = nTBpos, prob = 1 - rperformance[[2]]$spec)
+      nTBpos_dualneg <- nTBpos - nTBpos_dualpos
+
+      pop <- c(TBpos_dualpos, TBpos_dualneg, TBneg, nTBpos_dualpos, nTBpos_dualneg, TBneg)
+    }
 
     ##########
     # totals #

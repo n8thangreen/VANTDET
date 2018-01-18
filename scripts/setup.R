@@ -9,7 +9,9 @@ devtools::load_all(".")
 library(IDEAdectree)
 library(BCEA)
 library(ggplot2)
+library(purrr)
 library(dplyr)
+library(formattable)
 library(plotCostEffectiveness)
 
 

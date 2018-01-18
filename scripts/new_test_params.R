@@ -16,6 +16,7 @@
 # £24.20 * 8 = 193.6
 # http://www.imperial.ac.uk/media/imperial-college/administration-and-support-services/hr/public/salaries/job-families/AR---London-SP-Rates---2017-18.pdf
 
+# load("C:/Users/ngreen1/Dropbox/TB/IDEA/R/packages/IDEAdectree/data/COSTdistns_allerror.RData")
 costs <- COST.distns.allerror
 
 costs$transcript <- list(distn = "none",
@@ -40,7 +41,7 @@ costs$molecular <- list(distn = "none",
 costs$visit1 <- list(distn = "gamma",
                      params = c(shape = 53.3, scale = 4.52))
 
-costs$visit2 <- list(distn == "gamma",
+costs$visit2 <- list(distn = "gamma",
                      params = c(shape = 18.78, scale = 7.62))
 
 
@@ -56,12 +57,6 @@ time_res$transcript <- list(distn = "unif",
 time_res$proteomic_SELDI <- list(distn = "unif",
                                  params = c(min = 0.5, max = 2))
 
-# time_res$proteomic_LC_MS <- list(distn = "unif",
-#                                  params = c(min = 0.5, max = 2))
-#
-# time_res$proteomic_ELISA <- list(distn = "unif",
-#                                  params = c(min = 0.5, max = 2))
-
 time_res$proteomic_flowassay <- list(distn = "unif",
                                      params = c(min = 2, max = 7))
 
@@ -69,55 +64,43 @@ time_res$proteomic_flowassay <- list(distn = "unif",
 time_res$molecular <- list(distn = "unif",
                            params = c(min = NA, max = NA))
 
+##TODO:
+time_res$IGRA <- list(distn = "unif",
+                      params = c(min = 1, max = 1))
+
 
 ####################
 # test performance #
 ####################
 
-performance <- list(transcript =
-                      list(rulein =
+performance <- list(transcript_rulein =
                              list(sens =
                                     list(distn = "unif",
                                          params = c(min = 0.63, max = 0.84)),
                                   spec =
                                     list(distn = "unif",
                                          params = c(min = 0.72, max = 0.89))),
-                           ruleout =
-                             list(sens =
-                                    list(distn = "unif",
-                                         params = c(min = 0.63, max = 0.84)),
-                                  spec =
-                                    list(distn = "unif",
-                                         params = c(min = 0.72, max = 0.89)))))
-
-
-##TODO:
-performance$proteomic_SELDI <- list(rulein =
-                                      list(sens =
-                                             list(distn = "unif",
-                                                  params = c(min = NA, max = NA)),
-                                           spec =
-                                             list(distn = "unif",
-                                                  params = c(min = NA, max = NA))),
-                                    ruleout =
-                                      list(sens =
-                                             list(distn = "unif",
-                                                  params = c(min = NA, max = NA)),
-                                           spec =
-                                             list(distn = "unif",
-                                                  params = c(min = NA, max = NA))))
-
-# performance$proteomic_LC_MS$sens$distn <- "unif"
-# performance$proteomic_LC_MS$sens$params <- c(min = 0.55, max = 0.91)
-#
-# performance$proteomic_LC_MS$spec$distn <- "unif"
-# performance$proteomic_LC_MS$spec$params <- c(min = 0.63, max = 0.93)
-#
-# performance$proteomic_ELISA$sens$distn <- "unif"
-# performance$proteomic_ELISA$sens$params <- c(min = NA, max = NA)
-#
-# performance$proteomic_ELISA$spec$distn <- "unif"
-# performance$proteomic_ELISA$spec$params <- c(min = NA, max = NA)
+                    transcript_ruleout =
+                      list(sens =
+                             list(distn = "unif",
+                                  params = c(min = 0.63, max = 0.84)),
+                           spec =
+                             list(distn = "unif",
+                                  params = c(min = 0.72, max = 0.89))),
+                    proteomic_SELDI_rulein =
+                      list(sens =
+                             list(distn = "unif",
+                                  params = c(min = NA, max = NA)),
+                           spec =
+                             list(distn = "unif",
+                                  params = c(min = NA, max = NA))),
+                    proteomic_SELDI_ruleout =
+                      list(sens =
+                             list(distn = "unif",
+                                  params = c(min = NA, max = NA)),
+                           spec =
+                             list(distn = "unif",
+                                  params = c(min = NA, max = NA))))
 
 
 performance$proteomic_flowassay <- list(sens =
@@ -136,12 +119,12 @@ performance$molecular <- list(sens =
                                      params = c(min = NA, max = NA)))
 
 ##TODO:
-performance$IGRApos_then_flowassay <- list(sens =
-                                             list(distn = "unif",
-                                                  params =  c(min = NA, max = NA)),
-                                           spec =
-                                             list(distn = "unif",
-                                                  params =  c(min = NA, max = NA)))
+performance$IGRA <- list(sens =
+                           list(distn = "unif",
+                                params =  c(min = 0.9, max = 0.9)),
+                         spec =
+                           list(distn = "unif",
+                                params =  c(min = 0.9, max = 0.9)))
 
 
 # save --------------------------------------------------------------------
