@@ -9,18 +9,19 @@ dectree_test <-
                  nsim = 1,
                  name.newtest = "proteomic_flowassay",
                  costDistns = costs,
-                 time_res = time_res$proteomic_flowassay,
+                 time_res = list(time_res$proteomic_flowassay),
                  drug = drug)
 
 
-  followup_pdf <- data.frame(x = c(1,2),
-                             y = c(0,1))
+  followup_pdf <- data.frame(x = c(1, 2),
+                             y = c(0, 1))
 
-  PERFORMANCE <- list()
-  PERFORMANCE$sens$distn <- "unif"
-  PERFORMANCE$sens$params <- c(min = 0, max = 0)
-  PERFORMANCE$spec$distn <- "unif"
-  PERFORMANCE$spec$params <- c(min = 0, max = 0)
+  PERFORMANCE <- list(sens =
+                        list(distn = "unif",
+                             params = c(min = 0, max = 0)),
+                      spec =
+                        list(distn = "unif",
+                             params = c(min = 0, max = 0)))
 
   QALY_LOSS <-
     list(TB = list(distn = "unif",
@@ -38,7 +39,7 @@ dectree_test <-
 
     out <- dectree_test(
       prevalence = 1,
-      performance = PERFORMANCE,
+      performance = list(PERFORMANCE),
       terminal_cost = function(...) c(0, 1, 0,0),
       terminal_health = function(health) c(0, health$followup, 0,0),
       followup_pdf = followup_pdf,
@@ -49,7 +50,7 @@ dectree_test <-
 
     out <- dectree_test(
       prevalence = 0,
-      performance = PERFORMANCE,
+      performance = list(PERFORMANCE),
       terminal_cost = function(...) c(0,0, 1, 0),
       terminal_health = function(health) c(0,0, health$twomonthTx, 0),
       followup_pdf = followup_pdf,

@@ -9,7 +9,7 @@ dectree_test <-
                  nsim = 1,
                  name.newtest = "proteomic_flowassay",
                  costDistns = costs,
-                 time_res = time_res$proteomic_flowassay,
+                 time_res = list(time_res$proteomic_flowassay),
                  drug = drug,
                  QALYloss = QALYloss)
 
@@ -17,13 +17,13 @@ dectree_test <-
 test_that("dectree performance and prevalence", {
 
 
-  PERFORMANCE <- list(
+  PERFORMANCE <- list(list(
     sens =
       list(distn = "unif",
            params = c(min = 1, max = 1)),
     spec =
       list(distn = "unif",
-           params = c(min = 1, max = 1)))
+           params = c(min = 1, max = 1))))
 
   out <- dectree_test(
     prevalence = 1,
@@ -67,7 +67,7 @@ test_that("dectree terminal cost/health and prevalence", {
 
   out <- dectree_test(
     prevalence = 1,
-    performance = performance$proteomic_flowassay,
+    performance = list(performance$proteomic_flowassay),
     terminal_cost = function(...) c(0,0,1,1),
     terminal_health = function(...) c(0,0,1,1))
 
@@ -76,7 +76,7 @@ test_that("dectree terminal cost/health and prevalence", {
 
   out <- dectree_test(
     prevalence = 1,
-    performance = performance$proteomic_flowassay,
+    performance = list(performance$proteomic_flowassay),
     terminal_cost = function(...) c(1,1,0,0),
     terminal_health = function(...) c(1,1,0,0))
 
@@ -85,7 +85,7 @@ test_that("dectree terminal cost/health and prevalence", {
 
   out <- dectree_test(
     prevalence = 0,
-    performance = performance$proteomic_flowassay,
+    performance = list(performance$proteomic_flowassay),
     terminal_cost = function(...) c(1,1,0,0),
     terminal_health = function(...) c(1,1,0,0))
 
@@ -94,7 +94,7 @@ test_that("dectree terminal cost/health and prevalence", {
 
   out <- dectree_test(
     prevalence = 0,
-    performance = performance$proteomic_flowassay,
+    performance = list(performance$proteomic_flowassay),
     terminal_cost = function(...) c(0,0,1,1),
     terminal_health = function(...) c(0,0,1,1))
 
@@ -103,7 +103,7 @@ test_that("dectree terminal cost/health and prevalence", {
 
   out <- dectree_test(
     prevalence = 0.5,
-    performance = performance$proteomic_flowassay,
+    performance = list(performance$proteomic_flowassay),
     terminal_cost = function(...) c(1,1,1,1),
     terminal_health = function(...) c(1,1,1,1))
 
@@ -112,7 +112,7 @@ test_that("dectree terminal cost/health and prevalence", {
 
   out <- dectree_test(
     prevalence = 0.5,
-    performance = performance$proteomic_flowassay,
+    performance = list(performance$proteomic_flowassay),
     terminal_cost = function(...) c(0,0,0,0),
     terminal_health = function(...) c(0,0,0,0))
 

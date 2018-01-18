@@ -12,7 +12,7 @@ dectree_test <-
                  nsim = 1,
                  name.newtest = "null_test",
                  costDistns = costs,
-                 time_res = time_res$proteomic_flowassay,
+                 time_res = list(time_res$proteomic_flowassay),
                  drug = drug,
                  QALYloss = QALYloss)
 
@@ -20,7 +20,7 @@ dectree_test <-
 test_that("dectree status-quo", {
 
   out <- dectree_test(
-    performance = performance$proteomic_flowassay,
+    performance = list(performance$proteomic_flowassay),
     terminal_cost = function(cost) c(cost$std.TB,
                                      cost$std.TB,
                                      cost$std.nonTB,
