@@ -40,27 +40,27 @@ terminal_health_rulein <- function(health) {
     health$std.nonTB + health$newtest)
 }
 
-#
-##
-##TODO:
-##
-#
 
+terminal_cost_dual_rulein <- function(cost) {
 
-terminal_cost_dual <- function(cost) {
-
-  c(cost$visit1 + cost$first_test + cost$second_test,
-    cost$visit1 + cost$std.TB + cost$first_test,
-    cost$visit1 + cost$twomonthTx + cost$first_test + cost$second_test + cost$visit2,
-    cost$visit1 + cost$std.nonTB + cost$first_test)
+  c(cost$visit1 + cost$newtest[1] + cost$newtest[2],
+    cost$visit1 + cost$std.TB + cost$newtest[1] + cost$newtest[2],
+    cost$visit1 + cost$std.TB + cost$newtest[1],
+    cost$visit1 + cost$twomonthTx + cost$newtest[1] + cost$newtest[2] + cost$visit2,
+    cost$visit1 + cost$std.nonTB + cost$newtest[1] + cost$newtest[2],
+    cost$visit1 + cost$std.nonTB + cost$newtest[1]) %>%
+    purrr::map_dbl(1)
 }
 
-terminal_health_dual <- function(health) {
+terminal_health_dual_rulein <- function(health) {
 
-  c(health$first_test + health$second_test,
-    health$std.TB + health$first_test,
-    health$twomonthTx + health$first_test + health$second_test,
-    health$std.nonTB + health$first_test)
+  c(health$newtest[1] + health$newtest[2],
+    health$std.TB + health$newtest[1] + health$newtest[2],
+    health$std.TB + health$newtest[1],
+    health$twomonthTx + health$newtest[1] + health$newtest[2],
+    health$std.nonTB + health$newtest[1] + health$newtest[2],
+    health$std.nonTB + health$newtest[1]) %>%
+    purrr::map_dbl(1)
 }
 
 
