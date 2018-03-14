@@ -12,13 +12,14 @@ LazyData: true
 Imports:
     reshape,
     ggplot2,
-    XLConnect,
     dplyr,
     mondate,
     lubridate,
     magrittr,
     purrr,
-    treeSimR,
-    formattable
+    treeSimR
 RoxygenNote: 6.0.1
-Suggests: testthat
+Suggests: testthat,
+          XLConnect,
+          formattable,
+          here

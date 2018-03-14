@@ -6,20 +6,20 @@
 
 devtools::load_all(".")
 
-library(IDEAdectree)
 library(BCEA)
 library(ggplot2)
 library(purrr)
 library(dplyr)
 library(formattable)
+library(IDEAdectree)
 library(plotCostEffectiveness)
 
 
 data("TBdata_clinical_cleaned", package = "IDEAdectree")
 
 data("drug", package = "VANTDET")
-data("costs", package = "VANTDET")
 data("QALYloss",  package = "VANTDET")
+data("costs", package = "VANTDET")
 data("time_res", package = "VANTDET")
 data("performance", package = "VANTDET")
 

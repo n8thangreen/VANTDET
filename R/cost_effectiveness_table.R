@@ -107,7 +107,7 @@ cost_effectiveness_table.default <- function(dat,
                            # Eceac2k, Eceac3k,
                            p_ce2k, p_ce3k)
 
-  if (html) {
+  if (html && suppressPackageStartupMessages(suppressWarnings(require(formattable)))) {
     sign_formatter <- formatter("span",
                                 style = x ~ style(color = ifelse(x > 0.5, "green",
                                                                  ifelse(x < 0.5, "red", "black"))))

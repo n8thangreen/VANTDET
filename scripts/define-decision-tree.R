@@ -1,7 +1,10 @@
 #
 # VANTDET
 # define-decision-tree.R
+# N Green
 #
+# total pathway costs and health for each end state
+# for each scenario
 
 
 # rule-out test

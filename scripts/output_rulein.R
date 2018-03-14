@@ -9,7 +9,6 @@
 
 # HIV?
 
-source(file = "scripts/define-decision-tree.R")
 
 dat <- list()
 
