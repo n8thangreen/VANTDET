@@ -17,6 +17,7 @@
 # http://www.imperial.ac.uk/media/imperial-college/administration-and-support-services/hr/public/salaries/job-families/AR---London-SP-Rates---2017-18.pdf
 
 # load("C:/Users/ngreen1/Dropbox/TB/IDEA/R/packages/IDEAdectree/data/COSTdistns_allerror.RData")
+data("COSTdistns_allerror", package = "IDEAdectree")
 costs <- COST.distns.allerror
 
 costs$transcript <- list(distn = "none",
@@ -31,8 +32,8 @@ costs$proteomic_SELDI <- list(distn = "none",
 # costs$proteomic_ELISA <- list(distn = "none",
 #                               params = c(mean = 20 + 193.6))
 
-costs$proteomic_flowassay <- list(distn = "none",
-                                  params = c(mean = 100 + 150))
+costs$flow_cytometry <- list(distn = "none",
+                             params = c(mean = 100 + 150))
 
 ##TODO:
 costs$molecular <- list(distn = "none",
@@ -57,8 +58,8 @@ time_res$transcript <- list(distn = "unif",
 time_res$proteomic_SELDI <- list(distn = "unif",
                                  params = c(min = 0.5, max = 2))
 
-time_res$proteomic_flowassay <- list(distn = "unif",
-                                     params = c(min = 2, max = 7))
+time_res$flow_cytometry <- list(distn = "unif",
+                                params = c(min = 2, max = 7))
 
 ##TODO:
 time_res$molecular <- list(distn = "unif",
@@ -74,12 +75,12 @@ time_res$IGRA <- list(distn = "unif",
 ####################
 
 performance <- list(transcript_rulein =
-                             list(sens =
-                                    list(distn = "unif",
-                                         params = c(min = 0.63, max = 0.84)),
-                                  spec =
-                                    list(distn = "unif",
-                                         params = c(min = 0.72, max = 0.89))),
+                      list(sens =
+                             list(distn = "unif",
+                                  params = c(min = 0.63, max = 0.84)),
+                           spec =
+                             list(distn = "unif",
+                                  params = c(min = 0.72, max = 0.89))),
                     transcript_ruleout =
                       list(sens =
                              list(distn = "unif",
@@ -103,12 +104,12 @@ performance <- list(transcript_rulein =
                                   params = c(min = NA, max = NA))))
 
 
-performance$proteomic_flowassay <- list(sens =
-                                          list(distn = "unif",
-                                               params = c(min = 0.5487, max = 0.9064)),
-                                        spec =
-                                          list(distn = "unif",
-                                               params = c(min = 0.718, max = 0.966)))
+performance$flow_cytometry <- list(sens =
+                                     list(distn = "unif",
+                                          params = c(min = 0.5487, max = 0.9064)),
+                                   spec =
+                                     list(distn = "unif",
+                                          params = c(min = 0.718, max = 0.966)))
 
 ##TODO:
 performance$molecular <- list(sens =
