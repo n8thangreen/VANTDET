@@ -43,9 +43,6 @@ dectree <- function(data,
                     terminal_cost,
                     followup_pdf, ...) {
 
-  # require(assertive)
-  require(triangle)
-
   stopifnot(name.newtest %in% c(NA, names(costDistns)))
   stopifnot(quant >= 0, quant <= 1)
   stopifnot(nsim > 0,
@@ -54,9 +51,6 @@ dectree <- function(data,
             c.newtest >= 0)
   stopifnot(length(performance) == length(name.newtest))
   stopifnot(length(time_res) == length(name.newtest))
-
-
-  median <- purrr::partial(...f = quantile, probs = quant, na.rm = TRUE)
 
   e <- c <- NULL
 
@@ -101,11 +95,13 @@ dectree <- function(data,
                                          total_drug_cost(drug$pyrazinamid) +
                                          total_drug_cost(drug$ethambutol, weight))
 
-  for (i in 1:nsim) {
+  for (i in seq_len(nsim)) {
 
-    rperformance <- lapply(performance, function(x) treeSimR::sample_distributions(x))
+    # rperformance <- lapply(performance, function(x) treeSimR::sample_distributions(x))
+    rperformance <- lapply(performance, treeSimR::sample_distributions)
     rcosts <- treeSimR::sample_distributions(costDistns)
-    t.newtest <- sapply(time_res, function(x) unlist(treeSimR::sample_distributions(x)))
+    # t.newtest <- sapply(time_res, function(x) unlist(treeSimR::sample_distributions(x)))
+    t.newtest <- sapply(time_res, treeSimR::sample_distributions, simplify = TRUE)
     rQALYloss <- treeSimR::sample_distributions(QALYloss)/365.25
 
     rfollowup <- inverse_sample(followup_cdf)
@@ -133,10 +129,10 @@ dectree <- function(data,
     sboot.nonTB <- sample(which(data$DosanjhGrouped == 4), replace = TRUE)
     sboot.TB <- sample(which(data$DosanjhGrouped %in% c(1,2,3)), replace = TRUE)
 
-    cost$std.nonTB <- median(totalcost[sboot.nonTB]) %>% unname()
-    cost$std.TB <- median(totalcost[sboot.TB]) %>% unname()
-    start.to.diag.nonTB <- median(data$start.to.diag[sboot.nonTB]) %>% unname()
-    start.to.diag.TB <- median(data$start.to.diag[sboot.TB]) %>% unname()
+    cost$std.nonTB <- median(totalcost[sboot.nonTB])
+    cost$std.TB <- median(totalcost[sboot.TB])
+    start.to.diag.nonTB <- median(data$start.to.diag[sboot.nonTB])
+    start.to.diag.TB <- median(data$start.to.diag[sboot.TB])
 
     health$std.TB <- rQALYloss$TB * start.to.diag.TB
     health$std.nonTB <- rQALYloss$TB * start.to.diag.nonTB
