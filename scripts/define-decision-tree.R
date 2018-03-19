@@ -7,7 +7,9 @@
 # for each scenario
 
 
-# rule-out test
+#################
+# rule-out test #
+#################
 
 terminal_cost_ruleout <- function(cost) {
 
@@ -25,22 +27,25 @@ terminal_health_ruleout <- function(health) {
     health$newtest)
 }
 
-# rule-in test
+
+################
+# rule-in test #
+################
 
 terminal_cost_rulein <- function(cost) {
 
   c(cost$visit1 + cost$newtest,
-    cost$visit1 + cost$std.TB + cost$newtest,
-    cost$visit1 + cost$twomonthTx + cost$newtest + cost$visit2,
-    cost$visit1 + cost$std.nonTB + cost$newtest)
+    cost$visit1 + cost$newtest + cost$std.TB,
+    cost$visit1 + cost$newtest + cost$twomonthTx + cost$visit2,
+    cost$visit1 + cost$newtest + cost$std.nonTB)
 }
 
 terminal_health_rulein <- function(health) {
 
   c(health$newtest,
-    health$std.TB + health$newtest,
-    health$twomonthTx + health$newtest,
-    health$std.nonTB + health$newtest)
+    health$newtest + health$std.TB,
+    health$newtest + health$twomonthTx,
+    health$newtest + health$std.nonTB)
 }
 
 

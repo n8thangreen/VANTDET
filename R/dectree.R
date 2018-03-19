@@ -97,11 +97,9 @@ dectree <- function(data,
 
   for (i in seq_len(nsim)) {
 
-    # rperformance <- lapply(performance, function(x) treeSimR::sample_distributions(x))
     rperformance <- lapply(performance, treeSimR::sample_distributions)
     rcosts <- treeSimR::sample_distributions(costDistns)
-    # t.newtest <- sapply(time_res, function(x) unlist(treeSimR::sample_distributions(x)))
-    t.newtest <- sapply(time_res, treeSimR::sample_distributions, simplify = TRUE)
+    t.newtest <- lapply(time_res, treeSimR::sample_distributions)
     rQALYloss <- treeSimR::sample_distributions(QALYloss)/365.25
 
     rfollowup <- inverse_sample(followup_cdf)
@@ -112,25 +110,34 @@ dectree <- function(data,
 
     totalcost <- calcPatientCostofTests(data, COSTS = rcosts)
 
-    whoCat4Treated <- !is.na(data$TBDrugStart.min) & data$DosanjhGrouped == "4"
+    whoCat4Treated <- !is.na(data$TBDrugStart.min) & is_notTB(data)
 
     totalcost[whoCat4Treated] <- totalcost[whoCat4Treated] + cost$twomonthTx
 
     if (!all(is.na(name.newtest))) cost$newtest <- unlist(rcosts[name.newtest])
 
-    health$newtest <- rQALYloss$TB * t.newtest
+    health$newtest <- rQALYloss$TB * unlist(t.newtest)
 
     health$followup <- rQALYloss$TB * rfollowup
 
-    health$twomonthTx <- (rQALYloss$TB + rQALYloss$Hepatotoxicity + rQALYloss$Nausea) * rfollowup
+    twomonthTx_QALYloss <- rQALYloss[c('TB', 'Hepatotoxicity', 'Nausea')] %>% sum
+    health$twomonthTx <- twomonthTx_QALYloss * rfollowup
 
     # current observed time and cost estimates
     # balanced samples
-    sboot.nonTB <- sample(which(data$DosanjhGrouped == 4), replace = TRUE)
-    sboot.TB <- sample(which(data$DosanjhGrouped %in% c(1,2,3)), replace = TRUE)
+    sboot.nonTB <-
+      is_notTB(data) %>%
+      which() %>%
+      sample(replace = TRUE)
+
+    sboot.TB <-
+      is_TB(data) %>%
+      which() %>%
+      sample(replace = TRUE)
 
     cost$std.nonTB <- median(totalcost[sboot.nonTB])
     cost$std.TB <- median(totalcost[sboot.TB])
+
     start.to.diag.nonTB <- median(data$start.to.diag[sboot.nonTB])
     start.to.diag.TB <- median(data$start.to.diag[sboot.TB])
 
@@ -146,10 +153,14 @@ dectree <- function(data,
     TB  <- rbinom(n = 1, size = N, prob = prevalence)
     nTB <- N - TB
 
-    TBpos <- rbinom(n = 1, size = TB, prob = rperformance[[1]]$sens)
+    TBpos <- rbinom(n = 1,
+                    size = TB,
+                    prob = rperformance[[1]]$sens)
     TBneg <- TB - TBpos
 
-    nTBpos <- rbinom(n = 1, size = nTB, prob = 1 - rperformance[[1]]$spec)
+    nTBpos <- rbinom(n = 1,
+                     size = nTB,
+                     prob = 1 - rperformance[[1]]$spec)
     nTBneg <- nTB - nTBpos
 
     # final subpopulation sizes
@@ -158,10 +169,14 @@ dectree <- function(data,
 
     if (num_tests == 2) {
 
-      TBpos_dualpos <- rbinom(n = 1, size = TBpos, prob = rperformance[[2]]$sens)
+      TBpos_dualpos <- rbinom(n = 1,
+                              size = TBpos,
+                              prob = rperformance[[2]]$sens)
       TBpos_dualneg <- TBpos - TBpos_dualpos
 
-      nTBpos_dualpos <- rbinom(n = 1, size = nTBpos, prob = 1 - rperformance[[2]]$spec)
+      nTBpos_dualpos <- rbinom(n = 1,
+                               size = nTBpos,
+                               prob = 1 - rperformance[[2]]$spec)
       nTBpos_dualneg <- nTBpos - nTBpos_dualpos
 
       pop <- c(TBpos_dualpos, TBpos_dualneg, TBneg, nTBpos_dualpos, nTBpos_dualneg, TBneg)
