@@ -1,5 +1,5 @@
 
 median <- purrr::partial(...f = quantile,
-                         probs = quant,
+                         probs = 0.5,
                          na.rm = TRUE,
                          names = FALSE)
