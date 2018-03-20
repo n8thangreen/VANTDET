@@ -7,9 +7,9 @@ dectree_test <-
   purrr::partial(...f = dectree,
                  data = data,
                  nsim = 1,
-                 name.newtest = "proteomic_flowassay",
+                 name.newtest = "transcriptomic",
                  costDistns = costs,
-                 time_res = list(time_res$proteomic_flowassay),
+                 time_res = list(time_res$transcriptomic),
                  drug = drug)
 
 

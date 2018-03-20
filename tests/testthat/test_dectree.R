@@ -7,16 +7,16 @@ dectree_test <-
   purrr::partial(...f = dectree,
                  data = data,
                  nsim = 1,
-                 name.newtest = "proteomic_flowassay",
+                 name.newtest = "transcriptomic",
                  costDistns = costs,
-                 time_res = list(time_res$proteomic_flowassay),
+                 time_res = list(time_res$transcriptomic),
                  drug = drug,
                  QALYloss = QALYloss)
 
 
 test_that("dectree performance and prevalence", {
 
-
+  # perfect test
   PERFORMANCE <- list(list(
     sens =
       list(distn = "unif",
@@ -67,7 +67,7 @@ test_that("dectree terminal cost/health and prevalence", {
 
   out <- dectree_test(
     prevalence = 1,
-    performance = list(performance$proteomic_flowassay),
+    performance = list(performance$transcriptomic_rulein),
     terminal_cost = function(...) c(0,0,1,1),
     terminal_health = function(...) c(0,0,1,1))
 
@@ -76,7 +76,7 @@ test_that("dectree terminal cost/health and prevalence", {
 
   out <- dectree_test(
     prevalence = 1,
-    performance = list(performance$proteomic_flowassay),
+    performance = list(performance$transcriptomic_rulein),
     terminal_cost = function(...) c(1,1,0,0),
     terminal_health = function(...) c(1,1,0,0))
 
@@ -85,7 +85,7 @@ test_that("dectree terminal cost/health and prevalence", {
 
   out <- dectree_test(
     prevalence = 0,
-    performance = list(performance$proteomic_flowassay),
+    performance = list(performance$transcriptomic_rulein),
     terminal_cost = function(...) c(1,1,0,0),
     terminal_health = function(...) c(1,1,0,0))
 
@@ -94,7 +94,7 @@ test_that("dectree terminal cost/health and prevalence", {
 
   out <- dectree_test(
     prevalence = 0,
-    performance = list(performance$proteomic_flowassay),
+    performance = list(performance$transcriptomic_rulein),
     terminal_cost = function(...) c(0,0,1,1),
     terminal_health = function(...) c(0,0,1,1))
 
@@ -103,7 +103,7 @@ test_that("dectree terminal cost/health and prevalence", {
 
   out <- dectree_test(
     prevalence = 0.5,
-    performance = list(performance$proteomic_flowassay),
+    performance = list(performance$transcriptomic_rulein),
     terminal_cost = function(...) c(1,1,1,1),
     terminal_health = function(...) c(1,1,1,1))
 
@@ -112,7 +112,7 @@ test_that("dectree terminal cost/health and prevalence", {
 
   out <- dectree_test(
     prevalence = 0.5,
-    performance = list(performance$proteomic_flowassay),
+    performance = list(performance$transcriptomic_rulein),
     terminal_cost = function(...) c(0,0,0,0),
     terminal_health = function(...) c(0,0,0,0))
 
