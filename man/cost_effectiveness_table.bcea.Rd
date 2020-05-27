@@ -9,6 +9,9 @@
 \arguments{
 \item{wtp_threshold}{}
 }
+\value{
+
+}
 \description{
 cost_effectiveness_table.bcea
 }

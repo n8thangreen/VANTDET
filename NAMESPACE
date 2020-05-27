@@ -2,5 +2,6 @@
 
 S3method(cost_effectiveness_table,bcea)
 S3method(cost_effectiveness_table,default)
+export(dectree)
 export(inverse_sample)
 export(total_drug_cost)

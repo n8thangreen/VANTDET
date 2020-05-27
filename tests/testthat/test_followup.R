@@ -4,7 +4,7 @@ context("dectree followup times")
 source(here::here("scripts/setup.R"))
 
 dectree_test <-
-  purrr::partial(...f = dectree,
+  purrr::partial(.f = dectree,
                  data = data,
                  nsim = 1,
                  name.newtest = "transcriptomic",

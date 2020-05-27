@@ -18,7 +18,7 @@ Imports:
     magrittr,
     purrr,
     treeSimR
-RoxygenNote: 6.0.1
+RoxygenNote: 7.1.0
 Suggests: testthat,
           XLConnect,
           formattable,

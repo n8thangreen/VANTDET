@@ -9,6 +9,9 @@ total_drug_cost(drug, weight = 1)
 \arguments{
 \item{weight}{}
 }
+\value{
+
+}
 \description{
 Calculate Total Drug Costs Per Day
 }

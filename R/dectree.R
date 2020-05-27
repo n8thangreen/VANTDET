@@ -23,6 +23,7 @@
 #' @param ...
 #'
 #' @return Health and cost realisations (list)
+#' @export
 #'
 #' @examples
 #'

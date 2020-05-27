@@ -11,6 +11,9 @@
 
 \item{html}{output format}
 }
+\value{
+
+}
 \description{
 cost_effectiveness_table.default
 }
